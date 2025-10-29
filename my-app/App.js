@@ -1,39 +1,40 @@
-import * as React from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
 
-import HomeScreen from "./app/screens/HomeScreen";
-import SearchScreen from "./app/screens/SearchScreen";
-import DetailScreen from "./app/screens/DetailScreen";
-import AddRoomScreen from "./app/screens/AddRoomScreen";
+// Screens
+import HomeScreen from "../my-app/app/screens/HomeScreen";
+import PostScreen from "../my-app/app/screens/PostScreen";
+import MessageScreen from "../my-app/app/screens/MessageScreen";
+import ProfileScreen from "../my-app/app/screens/ProfileScreen";
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Trang chủ">
-        <Stack.Screen
-          name="Trang chủ"
-          component={HomeScreen}
-          options={{ title: "Tìm trọ nhanh" }}
-        />
-        <Stack.Screen
-          name="Tìm kiếm"
-          component={SearchScreen}
-          options={{ title: "Tìm kiếm phòng" }}
-        />
-        <Stack.Screen
-          name="Chi tiết phòng"
-          component={DetailScreen}
-          options={{ title: "Chi tiết phòng" }}
-        />
-        <Stack.Screen
-          name="Đăng tin"
-          component={AddRoomScreen}
-          options={{ title: "Đăng tin cho thuê" }}
-        />
-      </Stack.Navigator>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarActiveTintColor: "#007bff",
+          tabBarInactiveTintColor: "#888",
+          tabBarStyle: { height: 60, paddingBottom: 8 },
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
+            if (route.name === "Trang Chủ") iconName = "home";
+            else if (route.name === "Đăng Tin") iconName = "add-circle-outline";
+            else if (route.name === "Tin Nhắn") iconName = "chatbubble-outline";
+            else if (route.name === "Cá Nhân") iconName = "person-outline";
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+      >
+        <Tab.Screen name="Trang Chủ" component={HomeScreen} />
+        <Tab.Screen name="Đăng Tin" component={PostScreen} />
+        <Tab.Screen name="Tin Nhắn" component={MessageScreen} />
+        <Tab.Screen name="Cá Nhân" component={ProfileScreen} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
