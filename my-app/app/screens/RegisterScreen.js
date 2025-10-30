@@ -8,22 +8,26 @@ import {
   Image,
 } from "react-native";
 
-export default function LoginScreen({ navigation, setUser }) {
+export default function RegisterScreen({ navigation }) {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
+  const [confirm, setConfirm] = useState("");
 
-  const handleLogin = () => {
-    if (phone && password) {
-      setUser({ phone }); // Giả lập đăng nhập
-    } else {
+  const handleRegister = () => {
+    if (!phone || !password || !confirm) {
       alert("Vui lòng nhập đầy đủ thông tin!");
+      return;
     }
+    if (password !== confirm) {
+      alert("Mật khẩu không trùng khớp!");
+      return;
+    }
+    alert("Đăng ký thành công!");
+    navigation.navigate("Login");
   };
 
   return (
     <View style={styles.container}>
-      {/* Banner */}
       <Image
         source={{
           uri: "https://img.freepik.com/free-vector/flat-design-landscape-with-hills_23-2149154278.jpg",
@@ -31,14 +35,12 @@ export default function LoginScreen({ navigation, setUser }) {
         style={styles.banner}
       />
 
-      {/* Nội dung */}
       <View style={styles.content}>
-        <Text style={styles.title}>Đăng nhập</Text>
+        <Text style={styles.title}>Đăng ký</Text>
         <Text style={styles.subtitle}>
-          Vui lòng nhập thông tin để đăng nhập vào ứng dụng
+          Vui lòng điền thông tin bên dưới để tạo tài khoản mới
         </Text>
 
-        {/* Số điện thoại */}
         <TextInput
           style={styles.input}
           placeholder="Số điện thoại"
@@ -48,7 +50,6 @@ export default function LoginScreen({ navigation, setUser }) {
           onChangeText={setPhone}
         />
 
-        {/* Mật khẩu */}
         <TextInput
           style={styles.input}
           placeholder="Mật khẩu"
@@ -58,42 +59,23 @@ export default function LoginScreen({ navigation, setUser }) {
           onChangeText={setPassword}
         />
 
-        {/* Nhớ mật khẩu (custom checkbox) */}
-        <View style={styles.checkboxContainer}>
-          <TouchableOpacity
-            onPress={() => setRemember(!remember)}
-            style={{
-              width: 20,
-              height: 20,
-              borderWidth: 1,
-              borderColor: "#ccc",
-              backgroundColor: remember ? "#f76c6c" : "#fff",
-              borderRadius: 4,
-              justifyContent: "center",
-              alignItems: "center",
-              marginRight: 8,
-            }}
-          >
-            {remember && (
-              <Text style={{ color: "#fff", fontWeight: "bold" }}>✓</Text>
-            )}
-          </TouchableOpacity>
-          <Text style={styles.checkboxLabel}>Nhớ Mật Khẩu</Text>
-        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Nhập lại mật khẩu"
+          placeholderTextColor="#999"
+          secureTextEntry
+          value={confirm}
+          onChangeText={setConfirm}
+        />
 
-        {/* Nút đăng nhập */}
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Đăng nhập</Text>
+        <TouchableOpacity style={styles.button} onPress={handleRegister}>
+          <Text style={styles.buttonText}>Đăng ký</Text>
         </TouchableOpacity>
 
-        {/* Chuyển sang đăng ký */}
         <Text style={styles.footerText}>
-          Chưa có tài khoản?{" "}
-          <Text
-            style={styles.link}
-            onPress={() => navigation.navigate("Register")}
-          >
-            Đăng ký ngay
+          Đã có tài khoản?{" "}
+          <Text style={styles.link} onPress={() => navigation.navigate("Login")}>
+            Đăng nhập
           </Text>
         </Text>
       </View>
@@ -115,12 +97,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     marginBottom: 15,
   },
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  checkboxLabel: { color: "#000" },
   button: {
     backgroundColor: "#f76c6c",
     paddingVertical: 14,
